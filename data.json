@@ -1,0 +1,6 @@
+{
+	"ds": "graphite.com",
+	"target": "sumSeries(statsd.sets.graphite.*.count)",
+	"result_path": "tests.sum",
+	"tsdb": "graphite2.com"
+}

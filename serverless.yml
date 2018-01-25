@@ -1,0 +1,30 @@
+# The `service` block is the name of the service
+service: serverless-hello-world
+
+frameworkVersion: ">=1.2.0 <2.0.0"
+
+# The `provider` block defines where your service will be deployed
+provider:
+  name: aws
+  runtime: python3.6
+  memorySize: 128
+  timeout: 60
+
+plugins:
+  - serverless-python-requirements
+
+custom:
+  pythonRequirements:
+    dockerizePip: true
+
+# The `functions` block defines what code to deploy
+functions:
+  hey:
+    description: Lambda can took metrics from graphite and put it in graphite # optional, Description to publish to AWS
+    handler: handler.hey
+    # The `events` block defines how to trigger the handler.helloWorld code
+    # events:
+    #   - http:
+    #       path: test
+    #       method: get
+    #       cors: true
