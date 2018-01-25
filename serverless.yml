@@ -8,8 +8,9 @@ provider:
   name: aws
   runtime: python3.6
   memorySize: 128
-  timeout: 60
+  timeout: 30
 
+# install requirements to zip
 plugins:
   - serverless-python-requirements
 
@@ -19,9 +20,9 @@ custom:
 
 # The `functions` block defines what code to deploy
 functions:
-  hey:
-    description: Lambda can took metrics from graphite and put it in graphite # optional, Description to publish to AWS
-    handler: handler.hey
+  scrap_metric:
+    description: take metric from graphite and put it in graphite # optional, Description to publish to AWS
+    handler: handler.scrap_metric
     # The `events` block defines how to trigger the handler.helloWorld code
     # events:
     #   - http:

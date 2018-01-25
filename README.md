@@ -1,6 +1,7 @@
 # serverless_ex
 
 ## requirements
+aws credentials
 ```
 npm install -g serverless
 npm install --save serverless-python-requirements
@@ -12,21 +13,20 @@ npm install -g serverless
 npm install -g serverless
 ```
 
-## aws lambda
-https://serverless.com/framework/docs/providers/aws/guide/quick-start/ 
-
 ## deploy
 ```
-serverless deploy
+make deploy
 ```
 
 ## local run
 ```
-python3 handler.py
+make local_run
 ```
 
 ## invoke lambda
 ```
-serverless invoke --function hey --path data.json
+make invoke
 ```
 
+## aws lambda
+https://serverless.com/framework/docs/providers/aws/guide/quick-start/ 

@@ -33,7 +33,7 @@ def read_metric(graphite_web, target, fromDelta=100, untilDelta=0):
   return data_list
 
 
-def hey(event, context):
+def scrap_metric(event, context):
   ds = event["ds"]
   tsdb = event["tsdb"] # storage
   target = event["target"]
@@ -51,7 +51,7 @@ def hey(event, context):
   return True
 
 
-# if __name__ == '__main__':
-#   event = json.load(open('data.json'))
-#   res = hey(event, "")
-#   print(res)
+if __name__ == '__main__':
+  event = json.load(open('data.json'))
+  res = scrap_metric(event, "")
+  print(res)
