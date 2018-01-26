@@ -1,6 +1,10 @@
 all: deploy
 
-deploy:
+check:
+	python -m py_compile *.py
+	rm -f *.pyc	
+
+deploy: check
 	serverless deploy
 
 destroy:
