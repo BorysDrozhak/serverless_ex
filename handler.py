@@ -4,10 +4,19 @@ import time
 import json
 import requests
 
-READ_TIMEOUT=10
+READ_TIMEOUT=20
 
-def write_metric(carbon_server, mPath, mValue, timestamp, CARBON_PORT=2003):
-    message = '{} {} {}'.format(mPath, mValue, timestamp) + '\n'
+def write_metric(carbon_server, mPath, metrics, CARBON_PORT=2003):
+    '''
+    get metrics and send it to graphite
+    ex: [{'target': 'sumSeries(metric.path.*)', 'datapoints': [[20.0, 1516966190], [20.0, 1516966200], [20.0, 1516966210], [20.0, 1516966220], [20.0, 1516966230], [20.0, 1516966240], [20.0, 1516966250], [20.0, 1516966260], [20.0, 1516966270], [None, 1516966280]]}]
+    '''
+    message = ''
+    for metric in metrics[0]["datapoints"]:
+      if metric[0]:
+        # print('writing metric:{} to ds:{}. v:{} ts:{}'.format(mPath, carbon_server, metric[0], metric[1]))
+        message += '{} {} {}'.format(mPath, metric[0], metric[1]) + '\n'
+    print(len(message))
     message = bytes(message, 'utf-8')
     sock = socket.socket()
     sock.settimeout(10)
@@ -22,7 +31,7 @@ def write_metric(carbon_server, mPath, mValue, timestamp, CARBON_PORT=2003):
     return True
 
 
-def read_metric(graphite_web, target, fromDelta=100, untilDelta=0):
+def read_metric(graphite_web, target, fromDelta=1800, untilDelta=0):
   ts = time.time()
   tsfrom = int(ts - fromDelta)
   tsuntil = int(ts - untilDelta)
@@ -39,17 +48,13 @@ def scrap_metric(event, context):
   target = event["target"]
   result_path = event["result_path"]
   timestamp = int(time.time())
-  result = read_metric(ds, target)
-
-  if len(result) > 1:
+  metrics = read_metric(ds, target)
+  # print(metrics)
+  if len(metrics) > 1:
     return False
-
-  for metric in result[0]["datapoints"]:
-    if metric[0]:
-      print('writing metric:{} to ds:{}. v:{} ts:{}'.format(result_path, ds, metric[0], metric[1]))
-      write_metric(tsdb, result_path, metric[0], metric[1])
-  return True
-
+  
+  return write_metric(tsdb, result_path, metrics)
+  
 
 if __name__ == '__main__':
   event = json.load(open('data.json'))
